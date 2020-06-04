@@ -1,4 +1,4 @@
-"""This class is responsible for writing bpf programs and attaching them to right chains"""
+"""This class is responsible for writing bpf programs and attaching them to right hooks"""
 # pylint: disable=unused-argument
 import os 
 import json
@@ -15,7 +15,7 @@ class BpfManager(Manager):
     def initialize(self):
         """Initialize this module"""
         registrar.register_settings_file("settings", self)
-        registrar.register_file(self.bpf_filename, None, self)
+        registrar.register_file(self.bpf_filename, "bpfgen", self)
 
     #def sanitize_settings(self, settings_file):
     #    """
@@ -48,8 +48,6 @@ class BpfManager(Manager):
         filter_rules = settings['firewall']['tables']['filter']['chains'][0]['rules']
 
         file = open(filename, "w+")
-        file.write("## Auto Generated\n")
-        file.write("## DO NOT EDIT. Changes will be overwritten.\n")
         file.write("\n")
 
         json_str=''
